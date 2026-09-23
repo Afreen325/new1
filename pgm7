@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Portfolio & Resume</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 min-h-screen">
+
+  <!-- Header / Navigation -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-white/75 dark:bg-gray-900/75 border-b border-gray-200 dark:border-gray-800">
+    <div class="max-w-5xl mx-mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold tracking-tight">dev.portfolio</h1>
+      <button id="themeToggle" class="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+        🌙 Dark Mode
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="max-w-5xl mx-auto px-6 py-16">
+    <div class="space-y-4">
+      <span class="text-indigo-600 dark:text-indigo-400 font-semibold tracking-wide text-sm uppercase">Full-Stack Software Engineer</span>
+      <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight">Building scalable web apps & open-source tools.</h2>
+      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl">
+        Passionate about clean architecture, performance optimization, and developer experience.
+      </p>
+    </div>
+  </section>
+
+  <!-- Interactive Projects Section -->
+  <section class="max-w-5xl mx-auto px-6 py-8">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="text-2xl font-bold">Featured Projects</h3>
+      <div id="filterButtons" class="flex space-x-2">
+        <button data-filter="all" class="filter-btn px-3 py-1 text-sm rounded-md bg-indigo-600 text-white font-medium">All</button>
+        <button data-filter="web" class="filter-btn px-3 py-1 text-sm rounded-md bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300">Web</button>
+        <button data-filter="cli" class="filter-btn px-3 py-1 text-sm rounded-md bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300">CLI</button>
+      </div>
+    </div>
+
+    <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="project-card border border-gray-200 dark:border-gray-800 rounded-xl p-6 bg-white dark:bg-gray-800/50 shadow-sm" data-category="web">
+        <span class="text-xs font-semibold px-2 py-1 rounded bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300">Web</span>
+        <h4 class="text-xl font-bold mt-3 mb-2">Real-Time Analytics Engine</h4>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">High-throughput event streaming dashboard using WebSocket connections and React.</p>
+        <div class="flex text-xs space-x-2 font-mono text-gray-500">
+          <span>#React</span> <span>#Node.js</span> <span>#Tailwind</span>
+        </div>
+      </div>
+
+      <div class="project-card border border-gray-200 dark:border-gray-800 rounded-xl p-6 bg-white dark:bg-gray-800/50 shadow-sm" data-category="cli">
+        <span class="text-xs font-semibold px-2 py-1 rounded bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-300">CLI</span>
+        <h4 class="text-xl font-bold mt-3 mb-2">Git Workflow Assistant</h4>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Terminal tool for automating conventional commits and branch housekeeping.</p>
+        <div class="flex text-xs space-x-2 font-mono text-gray-500">
+          <span>#Python</span> <span>#GitAPI</span> <span>#CLI</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive JavaScript -->
+  <script>
+    // Theme Switcher
+    const toggleBtn = document.getElementById('themeToggle');
+    toggleBtn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      toggleBtn.textContent = document.documentElement.classList.contains('dark') ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+
+    // Project Filter Logic
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => {
+          b.classList.remove('bg-indigo-600', 'text-white');
+          b.classList.add('bg-gray-200', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300');
+        });
+        btn.classList.add('bg-indigo-600', 'text-white');
+        btn.classList.remove('bg-gray-200', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300');
+
+        const filter = btn.getAttribute('data-filter');
+        projectCards.forEach(card => {
+          if (filter === 'all' || card.getAttribute('data-category') === filter) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
