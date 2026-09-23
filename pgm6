@@ -1,0 +1,10 @@
+# 🚀 Daily DSA Tracker
+
+My daily repository for tracking Data Structures & Algorithms solutions across LeetCode, HackerRank, and CodeChef.
+
+## 📊 Progress Summary
+- Run `python tracker.py` to test and log new solutions.
+- Run `python -m unittest test_solutions.py` to execute all problem test suites.
+
+## 📁 Data Storage
+Logged problems are saved in `dsa_tracker.json`.
