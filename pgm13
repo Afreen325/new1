@@ -1,0 +1,35 @@
+import json
+import os
+
+FILE_NAME = "todo.json"
+
+def load_tasks():
+    if not os.path.exists(FILE_NAME):
+        return []
+    with open(FILE_NAME, "r") as f:
+        return json.load(f)
+
+def save_tasks(tasks):
+    with open(FILE_NAME, "w") as f:
+        json.dump(tasks, f, indent=4)
+
+def add_task(title):
+    tasks = load_tasks()
+    tasks.append({"id": len(tasks) + 1, "title": title, "completed": False})
+    save_tasks(tasks)
+    print(f"✅ Added: '{title}'")
+
+def list_tasks():
+    tasks = load_tasks()
+    if not tasks:
+        print("📌 No tasks found.")
+        return
+    print("\n📋 Your To-Do List:")
+    for task in tasks:
+        status = "✔" if task["completed"] else "❌"
+        print(f"[{status}] {task['id']}. {task['title']}")
+
+if __name__ == "__main__":
+    add_task("Set up repository")
+    add_task("Write unit tests")
+    list_tasks()
