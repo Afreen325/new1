@@ -1,0 +1,54 @@
+import os
+import requests
+
+GITHUB_USERNAME = os.getenv("GH_USERNAME", "octocat")
+README_PATH = "README.md"
+
+def fetch_user_events(username):
+    url = f"https://api.github.com/users/{username}/events/public"
+    response = requests.get(url, headers={"User-Agent": "Python-GH-Updater"})
+    if response.status_code != 200:
+        print(f"[-] Error fetching events: {response.status_code}")
+        return []
+    return response.json()
+
+def build_activity_summary(events, max_items=5):
+    activities = []
+    for event in events:
+        if len(activities) >= max_items:
+            break
+        event_type = event.get("type")
+        repo_name = event.get("repo", {}).get("name")
+        created_at = event.get("created_at", "")[:10]
+
+        if event_type == "PushEvent":
+            commit_count = len(event.get("payload", {}).get("commits", []))
+            activities.append(f"- 🚀 Pushed {commit_count} commit(s) to [`{repo_name}`](https://github.com/{repo_name}) on `{created_at}`")
+        elif event_type == "CreateEvent":
+            ref_type = event.get("payload", {}).get("ref_type")
+            activities.append(f"- ✨ Created new {ref_type} in [`{repo_name}`](https://github.com/{repo_name}) on `{created_at}`")
+        elif event_type == "WatchEvent":
+            activities.append(f"- ⭐ Starred [`{repo_name}`](https://github.com/{repo_name}) on `{created_at}`")
+
+    return "\n".join(activities) if activities else "- No recent public activity."
+
+def update_readme(activity_markdown):
+    template = f"""# 👋 Hello, I'm {GITHUB_USERNAME}!
+
+Welcome to my GitHub profile. I'm a developer building web applications and open-source utilities.
+
+## ⚡ Recent Activity
+{activity_markdown}
+
+---
+*Auto-updated via [GitHub Actions Workflow](.github/workflows/update_readme.yml).*
+"""
+    with open(README_PATH, "w", encoding="utf-8") as f:
+        f.write(template)
+    print("[+] Successfully updated README.md")
+
+if __name__ == "__main__":
+    print(f"[*] Fetching data for user: {GITHUB_USERNAME}")
+    events_data = fetch_user_events(GITHUB_USERNAME)
+    summary = build_activity_summary(events_data)
+    update_readme(summary)
