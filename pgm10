@@ -1,0 +1,22 @@
+def analyze_text(text):
+    words = text.split()
+    characters_with_spaces = len(text)
+    characters_no_spaces = len(text.replace(" ", ""))
+    sentences = text.count('.') + text.count('!') + text.count('?')
+    
+    return {
+        "word_count": len(words),
+        "char_count_total": characters_with_spaces,
+        "char_count_no_spaces": characters_no_spaces,
+        "estimated_sentences": max(sentences, 1 if len(words) > 0 else 0)
+    }
+
+if __name__ == "__main__":
+    sample_text = "Python is clean, readable, and powerful. How fast can you learn it?"
+    stats = analyze_text(sample_text)
+    
+    print(f"Text Analysis Results:")
+    print(f"- Words: {stats['word_count']}")
+    print(f"- Characters (with spaces): {stats['char_count_total']}")
+    print(f"- Characters (no spaces): {stats['char_count_no_spaces']}")
+    print(f"- Sentences: {stats['estimated_sentences']}")
