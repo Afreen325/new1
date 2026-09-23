@@ -1,0 +1,63 @@
+Program 1: Daily Algorithmic Problem Solver (DSA Tracker).
+
+This repository template includes a Python problem-solving script, an automated test runner, and a local progress logger that updates a JSON tracker when you complete a problem.
+
+File 1: tracker.py (Main Problem Solver & Logger)
+Python
+import json
+import os
+from datetime import datetime
+
+DATA_FILE = "dsa_tracker.json"
+
+def load_tracker():
+    if not os.path.exists(DATA_FILE):
+        return {"total_solved": 0, "problems": []}
+    with open(DATA_FILE, "r") as f:
+        return json.load(f)
+
+def save_tracker(data):
+    with open(DATA_FILE, "w") as f:
+        json.dump(data, f, indent=4)
+
+def log_problem(title, platform, difficulty, notes=""):
+    data = load_tracker()
+    entry = {
+        "id": data["total_solved"] + 1,
+        "title": title,
+        "platform": platform,
+        "difficulty": difficulty,
+        "notes": notes,
+        "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+    data["problems"].append(entry)
+    data["total_solved"] += 1
+    save_tracker(data)
+    print(f"[+] Successfully logged: '{title}' ({difficulty})")
+
+def solve_two_sum(nums, target):
+    """
+    Example Problem: Two Sum (LeetCode #1)
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    """
+    seen = {}
+    for i, num in enumerate(nums):
+        diff = target - num
+        if diff in seen:
+            return [seen[diff], i]
+        seen[num] = i
+    return []
+
+if __name__ == "__main__":
+    # Example execution & log
+    result = solve_two_sum([2, 7, 11, 15], 9)
+    print(f"Test Result: {result}")
+    
+    if result == [0, 1]:
+        log_problem(
+            title="Two Sum",
+            platform="LeetCode",
+            difficulty="Easy",
+            notes="Used hash map for O(n) time complexity lookups."
+        )
